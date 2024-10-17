@@ -1,6 +1,6 @@
 from typing import List
 from poop_db import coordMatrix
-
+import math
 
 def match(pattern: List[str], source: List[str]) -> List[str]:
     """Attempt to match pattern to source
@@ -74,6 +74,51 @@ def match(pattern: List[str], source: List[str]) -> List[str]:
 
     return result
 
-print(coordMatrix)
+def poopByRadius(userlon, userlat, radius) -> int:
+    count = 0
+    for plon,plat in coordMatrix:
+        if coordDistance(userlon,userlat,plon,plat) <= radius:
+            count += 1
+    print(count)
+    return count
+poopByRadius(41.9,-87.8,1)
+##def amIStandingOnPoop(userlon, userlat):
+
+
+def coordDistance(lon1, lat1, lon2, lat2) -> float:
+    lat1_rad = math.radians(lat1)
+    lon1_rad = math.radians(lon1)
+    lat2_rad = math.radians(lat2)
+    lon2_rad = math.radians(lon2)
+
+    dlon = lon2_rad - lon1_rad
+    dlat = lat2_rad - lat1_rad
+    a = (math.sin(dlat / 2) ** 2 + math.cos(lat1_rad) * math.cos(lat2_rad) * math.sin(dlon / 2) ** 2)
+    c = 2 * math.asin(math.sqrt(a))
+
+    radius_miles = 3956 #r of earth in miles
+
+    distance = radius_miles * c
+    return distance
+
+if __name__ == "__main__":
+    assert isinstance(poopByradius([41.839899331682, -87.64390048186, 0.03]), int), "poopByradius not returning an int"
+    assert sorted(poopByradius([41.839899331682, -87.64390048186, 0.03])) == sorted(
+        [unknown int]
+    ), "failed poopByRadius test"
+    assert isinstance(poopByradius)
+
+    assert isinstance(amIstandingOnPoop([41.839899331682, -87.64390048186]), bool), "amIstandingOnPoop not returning a list"
+    assert sorted(amIstandingOnPoop([41.839899331682, -87.64390048186])) == sorted(
+        [True or False?]
+    ), "failed amIstandingOnPoop"
+
+    assert isinstance(coordDistance([lon1, lat1, lon2, lat2]), float), "coordDistance not returning an int"
+    assert sorted(coordDistance([lon1, lat1, lon2, lat2])) == sorted(
+        [unknown float]
+    ), "failed coordDistance test"
+
+
+    print("All tests passed!")
 
     
