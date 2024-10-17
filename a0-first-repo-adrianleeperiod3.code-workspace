@@ -1,0 +1,24 @@
+{
+	"folders": [
+		{
+			"path": "../a0-first-repo-adrianleeperiod3"
+		},
+		{
+			"name": "a1-intro-to-python-adrianleeperiod3",
+			"path": "../a1-intro-to-python-adrianleeperiod3"
+		},
+		{
+			"name": "a2-movie-chatbot-adrianleeperiod3",
+			"path": "../a2-movie-chatbot-adrianleeperiod3"
+		},
+		{
+			"name": "a3-movie-chatbot-adrianleeperiod3",
+			"path": "../a3-movie-chatbot-adrianleeperiod3"
+		},
+		{
+			"name": "a3-project-the-ling-lings",
+			"path": "."
+		}
+	],
+	"settings": {}
+}

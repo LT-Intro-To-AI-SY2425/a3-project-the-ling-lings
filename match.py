@@ -1,4 +1,5 @@
 from typing import List
+from poop_db import coordMatrix
 
 
 def match(pattern: List[str], source: List[str]) -> List[str]:
@@ -72,3 +73,7 @@ def match(pattern: List[str], source: List[str]) -> List[str]:
             return None
 
     return result
+
+print(coordMatrix)
+
+    
