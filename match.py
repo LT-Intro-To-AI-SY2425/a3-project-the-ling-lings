@@ -1,5 +1,5 @@
-from typing import List
 from poop_db import coordMatrix
+from typing import List, Tuple, Callable, Any
 import math
 
 def match(pattern: List[str], source: List[str]) -> List[str]:
@@ -74,18 +74,7 @@ def match(pattern: List[str], source: List[str]) -> List[str]:
 
     return result
 
-def poopByRadius(userlon, userlat, radius) -> int:
-    count = 0
-    for plon,plat in coordMatrix:
-        if coordDistance(userlon,userlat,plon,plat) <= radius:
-            count += 1
-    print(count)
-    return count
-poopByRadius(41.9,-87.8,1)
-##def amIStandingOnPoop(userlon, userlat):
-
-
-def coordDistance(lon1, lat1, lon2, lat2) -> float:
+def coordDistance(lon1, lat1, lon2, lat2):
     lat1_rad = math.radians(lat1)
     lon1_rad = math.radians(lon1)
     lat2_rad = math.radians(lat2)
@@ -101,24 +90,116 @@ def coordDistance(lon1, lat1, lon2, lat2) -> float:
     distance = radius_miles * c
     return distance
 
+def inChicago(userlon, userlat): 
+    if coordDistance(userlon,userlat,41.8781,-87.6298) <= 12.5:
+        return True
+    else:
+        return False
+    
+def poopByRadius(userlon, userlat, radius) -> int:
+    if inChicago(userlon,userlat) == True: 
+        count = 0
+        for plon,plat in coordMatrix:
+            if coordDistance(userlon,userlat,plon,plat) <= radius:
+                count += 1
+        print(count)
+        return count
+    else:
+        return "Your location is not in Chicago."
+
+def amIStandingOnPoop(userlon, userlat):
+    if inChicago(userlon,userlat) == True: 
+        for plon,plat in coordMatrix:
+            if coordDistance(userlon,userlat,plon,plat) <= 0.0006:
+                return True
+            else: 
+                return False
+    else:
+        return "Your location is not in Chicago."
+
+def bye_action(dummy: List[str]) -> None:
+    raise KeyboardInterrupt
+
+pa_list: List[Tuple[List[str], Callable[[List[str]], List[Any]]]] = [
+    (str.split("How many poops are with a radius of _ miles"), poopByRadius),
+    (str.split("Am I standing on poop if I'm at %"), amIStandingOnPoop),
+    (["bye"], bye_action),
+]
+
+
+def search_pa_list(src: List[str]) -> List[str]:
+    """Takes source, finds matching pattern and calls corresponding action. If it finds
+    a match but has no answers it returns ["No answers"]. If it finds no match it
+    returns ["I don't understand"].
+
+    Args:
+        source - a phrase represented as a list of words (strings)
+
+    Returns:
+        a list of answers. Will be ["I don't understand"] if it finds no matches and
+        ["No answers"] if it finds a match but no answers
+    """
+    for pat, act in pa_list:
+        val = match(pat,src)
+        if val != None:
+            result = act(val)
+            if not result:
+                return ["No answers"]
+            return result
+    else:
+            return ["I don't understand"]
+
+
+def query_loop() -> None:
+    """The simple query loop. The try/except structure is to catch Ctrl-C or Ctrl-D
+    characters and exit gracefully.
+    """
+    print("Welcome to the movie database!\n")
+    while True:
+        try:
+            print()
+            query = input("Your query? ").replace("?", "").lower().split()
+            answers = search_pa_list(query)
+            for ans in answers:
+                print(ans)
+
+        except (KeyboardInterrupt, EOFError):
+            break
+
+    print("\nBye!\n")
+
+
+
+
 if __name__ == "__main__":
-    assert isinstance(poopByradius([41.839899331682, -87.64390048186, 0.03]), int), "poopByradius not returning an int"
-    assert sorted(poopByradius([41.839899331682, -87.64390048186, 0.03])) == sorted(
-        [unknown int]
+    assert isinstance(poopByRadius([41.983, -87.6598, 0.095]), int), "poopByRadius not returning an int"
+    assert sorted(poopByRadius([41.983, -87.6598,0.095])) == sorted(
+        [0]
     ), "failed poopByRadius test"
-    assert isinstance(poopByradius)
+    assert isinstance(poopByRadius)
 
-    assert isinstance(amIstandingOnPoop([41.839899331682, -87.64390048186]), bool), "amIstandingOnPoop not returning a list"
-    assert sorted(amIstandingOnPoop([41.839899331682, -87.64390048186])) == sorted(
-        [True or False?]
-    ), "failed amIstandingOnPoop"
+    assert isinstance(amIStandingOnPoop([41.983, -87.6598]), bool), "amIStandingOnPoop not returning a list"
+    assert sorted(amIStandingOnPoop([41.983, -87.6598])) == sorted(
+        [False]
+    ), "failed amIStandingOnPoop"
 
-    assert isinstance(coordDistance([lon1, lat1, lon2, lat2]), float), "coordDistance not returning an int"
-    assert sorted(coordDistance([lon1, lat1, lon2, lat2])) == sorted(
-        [unknown float]
-    ), "failed coordDistance test"
+    assert isinstance(poopByRadius([41.965304, -87.665429, 0.095]), int), "poopByRadius not returning an int"
+    assert sorted(poopByRadius([41.965304, -87.665429,0.095])) == sorted(
+        [1]
+    ), "failed poopByRadius test1"
+    assert isinstance(poopByRadius)
 
+    assert isinstance(amIStandingOnPoop([41.776862402207, -87.72028639493]), bool), "amIStandingOnPoop not returning a list"
+    assert sorted(amIStandingOnPoop([41.776862402207, -87.72028639493])) == sorted(
+        [True]
+    ), "failed amIStandingOnPoop1"
 
+    assert isinstance(poopByRadius([0, 0, 1]), str), "poopByRadius not returning an int"
+    assert sorted(poopByRadius([0, 0, 1])) == sorted(
+        ["Your location is not in Chicago."]
+    ), "failed poopByRadius test1"
+    assert isinstance(poopByRadius)
+    
     print("All tests passed!")
 
     
