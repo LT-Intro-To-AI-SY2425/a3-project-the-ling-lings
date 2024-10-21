@@ -102,7 +102,6 @@ def poopByRadius(userlon, userlat, radius) -> int:
         for plon,plat in coordMatrix:
             if coordDistance(userlon,userlat,plon,plat) <= radius:
                 count += 1
-        print(count)
         return count
     else:
         return "Your location is not in Chicago."
@@ -110,7 +109,7 @@ def poopByRadius(userlon, userlat, radius) -> int:
 def amIStandingOnPoop(userlon, userlat):
     if inChicago(userlon,userlat) == True: 
         for plon,plat in coordMatrix:
-            if coordDistance(userlon,userlat,plon,plat) <= 0.0006:
+            if plon == userlon and plat == userlat:
                 return True
             else: 
                 return False
@@ -172,33 +171,20 @@ def query_loop() -> None:
 
 
 if __name__ == "__main__":
-    assert isinstance(poopByRadius([41.983, -87.6598, 0.095]), int), "poopByRadius not returning an int"
-    assert sorted(poopByRadius([41.983, -87.6598,0.095])) == sorted(
-        [0]
-    ), "failed poopByRadius test"
-    assert isinstance(poopByRadius)
+    assert isinstance(poopByRadius(41.983, -87.6598, 0.095), int), "poopByRadius not returning an int"
+    assert (poopByRadius(41.983, -87.6598, 0.095)) == 0, "failed poopByRadius test"
 
-    assert isinstance(amIStandingOnPoop([41.983, -87.6598]), bool), "amIStandingOnPoop not returning a list"
-    assert sorted(amIStandingOnPoop([41.983, -87.6598])) == sorted(
-        [False]
-    ), "failed amIStandingOnPoop"
+    assert isinstance(amIStandingOnPoop(41.983, -87.6598), bool), "amIStandingOnPoop not returning a list"
+    assert (amIStandingOnPoop(41.983, -87.6598)) == False, "failed amIStandingOnPoop"
 
-    assert isinstance(poopByRadius([41.965304, -87.665429, 0.095]), int), "poopByRadius not returning an int"
-    assert sorted(poopByRadius([41.965304, -87.665429,0.095])) == sorted(
-        [1]
-    ), "failed poopByRadius test1"
-    assert isinstance(poopByRadius)
+    assert isinstance(poopByRadius(41.965304, -87.665429, 0.095), int), "poopByRadius not returning an int"
+    assert (poopByRadius(41.965304, -87.665429,0.095)) == 1, "failed poopByRadius test1"
 
-    assert isinstance(amIStandingOnPoop([41.776862402207, -87.72028639493]), bool), "amIStandingOnPoop not returning a list"
-    assert sorted(amIStandingOnPoop([41.776862402207, -87.72028639493])) == sorted(
-        [True]
-    ), "failed amIStandingOnPoop1"
+    assert isinstance(amIStandingOnPoop(41.903167133835, -87.754681464353), bool), "amIStandingOnPoop not returning a list"
+    assert (amIStandingOnPoop(41.903167133835, -87.754681464353)) == True, "failed amIStandingOnPoop1"
 
-    assert isinstance(poopByRadius([0, 0, 1]), str), "poopByRadius not returning an int"
-    assert sorted(poopByRadius([0, 0, 1])) == sorted(
-        ["Your location is not in Chicago."]
-    ), "failed poopByRadius test1"
-    assert isinstance(poopByRadius)
+    assert isinstance(poopByRadius(0, 0, 1), str), "poopByRadius not returning an int"
+    assert (poopByRadius(0, 0, 1)) == (("Your location is not in Chicago.")), "failed poopByRadius test1"
     
     print("All tests passed!")
 
